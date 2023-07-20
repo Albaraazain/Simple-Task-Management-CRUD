@@ -37,5 +37,43 @@ function getTasks() {
     .catch(error => {
         console.error('Error fatching tasks:', error);
     });
-    
+
 }
+
+// This function will handle the form submission event when a user adds a new task.
+function addTask(event) {
+    // Add an event listener to the form element in your HTML, listening for the submit event and calling the addTask() function when the event occurs.
+    // Prevent the default form submission behavior using event.preventDefault().
+    event.preventDefault();
+    // Get the values from the form input elements using the .value property.
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const dueDate = document.getElementById('due-date').value;
+    // Create a new task object using the values from the form.
+    const newTask = {
+        title,
+        description,
+        due_date: dueDate
+    };
+    // Use the fetch() function to send a POST request to the /api/tasks endpoint on your backend server. Pass the new task object as the second argument to the fetch() function.
+    fetch('/api/tasks', {
+        // The method is set to POST instead of GET because POST is used to create new resources on the server. while GET is used to retrieve existing resources.
+        method: 'POST', // set the request method to POST (instead of the default GET). This tells the server that we are sending a new task to be created.
+        headers: {  // set the request headers
+            'Content-Type': 'application/json'  // tell the server that the request body is JSON
+        },
+        body: JSON.stringify(newTask)  // convert the new task object to JSON
+    })
+    // Chain a .then() method to the fetch() function to handle the response from the server. Inside the .then() callback function, call the getTasks() function to refresh the task list.
+    .then(response => {
+        getTasks();
+    })
+    // Chain a .catch() method to the fetch() function to handle any errors that occur during the request.
+    .catch(error => {
+        console.error('Error adding task:', error);
+    });
+
+}
+
+// Add event listeners
+document.querySelector('#task-form').addEventListener('submit', addTask);
