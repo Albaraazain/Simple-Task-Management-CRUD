@@ -1,0 +1,2 @@
+PostgreSQL	# For the Database
+HTML, CSS, and JavaScript	# For the frontend (Interacts with the Database)
